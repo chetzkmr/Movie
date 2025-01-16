@@ -2,5 +2,3 @@ streamlit
 numpy
 pandas
 requests
-pickle
-gzip
