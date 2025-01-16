@@ -3,6 +3,55 @@ import streamlit as st
 import pickle
 import gzip
 
+st.set_page_config(
+    page_title="Chethan's Movie Recommender",
+    page_icon="🎥",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
+# Custom CSS for a modern theme
+st.markdown("""
+    <style>
+        body {
+            background: linear-gradient(120deg, #2E4053, #1C2833);
+            color: #FDFEFE;
+        }
+        .stApp {
+            background-color: #1C2833;
+        }
+        .header {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #FFC300; /* Modern yellow header */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        /* Style only the outer container of selectbox */
+        div[data-baseweb="select"] > div {
+            background-color: #2C3E50; /* Darker background for the select box */
+            color: #FDFEFE; /* White text for better visibility */
+            border-radius: 5px;
+            border: 1px solid #34495E;
+        }
+        div[data-baseweb="select"]:hover > div {
+            border: 1px solid #FFC300; /* Highlight border on hover */
+        }
+        .subheader {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #D5D8DC;
+            margin-bottom: 20px;
+        }
+        .movie-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #F7DC6F;
+            text-align: center;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 api_key= st.secrets["api_key"]
 
 def fetch_poster(movie_id):
@@ -25,38 +74,31 @@ def recommend(movie):
 
     return recommended_movies_name, recommended_movies_poster
 
-st.header("Chethan's Movie Recommendation System")
-
-# Load the movie list
+# Load movies and similarity matrix
 movies = pickle.load(open('movie_list.pkl', 'rb'))
 
-# Load the compressed similarity.pkl.gz
 with gzip.open('similarity.pkl.gz', 'rb') as f:
     similarity = pickle.load(f)
 
+# App Header
+st.markdown('<div class="header">🎬 Chethan\'s Movie Recommendation System</div>', unsafe_allow_html=True)
+
+# Movie selection with updated styling for `st.selectbox`
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
-    'Type or Select a movie to get recommendation',
-    movie_list
+    '🎥 Type or Select a Movie to Get Recommendations:',
+    movie_list,
 )
 
-if st.button('Show recommendation'):
+# Button and recommendations logic
+if st.button('💡 Show Recommendations'):
     recommended_movies_name, recommended_movies_poster = recommend(selected_movie)
-    
-    # Create individual columns and add content to each column
-    col1, col2, col3, col4, col5 = st.columns(5)
 
-    col1.text(recommended_movies_name[0])
-    col1.image(recommended_movies_poster[0], use_container_width=True)
+    st.markdown('<div class="subheader">Here are your top 5 recommendations:</div>', unsafe_allow_html=True)
 
-    col2.text(recommended_movies_name[1])
-    col2.image(recommended_movies_poster[1], use_container_width=True)
-
-    col3.text(recommended_movies_name[2])
-    col3.image(recommended_movies_poster[2], use_container_width=True)
-
-    col4.text(recommended_movies_name[3])
-    col4.image(recommended_movies_poster[3], use_container_width=True)
-
-    col5.text(recommended_movies_name[4])
-    col5.image(recommended_movies_poster[4], use_container_width=True)
+    # Display recommendations as cards
+    cols = st.columns(5)
+    for idx, col in enumerate(cols):
+        with col:
+            st.markdown(f'<div class="movie-title">{recommended_movies_name[idx]}</div>', unsafe_allow_html=True)
+            st.image(recommended_movies_poster[idx], use_container_width=True)
