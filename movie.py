@@ -47,16 +47,16 @@ if st.button('Show recommendation'):
     col1, col2, col3, col4, col5 = st.columns(5)
 
     col1.text(recommended_movies_name[0])
-    col1.image(recommended_movies_poster[0], use_column_width=True)
+    col1.image(recommended_movies_poster[0], use_container_width=True)
 
     col2.text(recommended_movies_name[1])
-    col2.image(recommended_movies_poster[1], use_column_width=True)
+    col2.image(recommended_movies_poster[1], use_container_width=True)
 
     col3.text(recommended_movies_name[2])
-    col3.image(recommended_movies_poster[2], use_column_width=True)
+    col3.image(recommended_movies_poster[2], use_container_width=True)
 
     col4.text(recommended_movies_name[3])
-    col4.image(recommended_movies_poster[3], use_column_width=True)
+    col4.image(recommended_movies_poster[3], use_container_width=True)
 
     col5.text(recommended_movies_name[4])
-    col5.image(recommended_movies_poster[4], use_column_width=True)
+    col5.image(recommended_movies_poster[4], use_container_width=True)
